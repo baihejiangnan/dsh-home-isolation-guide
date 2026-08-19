@@ -166,6 +166,23 @@ Command::new(dsh_binary)
 
 更多设计细节见 [docs/architecture.md](docs/architecture.md)。
 
+## 面向未来版本升级
+
+对于可能包含破坏性变化的 DSH 新版本，不应让新旧二进制直接共享正式 `DSH_HOME`。推荐同时隔离 DSH 安装目录、`DSH_HOME` 和端口，将升级变成并行候选环境测试。
+
+可以只把稳定环境的 profile 定义复制到新的候选 `DSH_HOME`：
+
+```powershell
+.\scripts\copy-profile-for-upgrade-test.ps1 `
+  -SourceHome "D:\dsh\stable" `
+  -TargetHome "D:\dsh\candidate-v2" `
+  -Profile "tauri"
+```
+
+脚本不会复制 API Key、会话、设置、Agent 预设或旧 `node_modules`。目标 DSH 版本重新安装插件后，可在独立端口验证兼容性。兼容则提升候选版本；不兼容则停止候选进程并重新启动原 `DSH_HOME`，无需反向迁移或恢复备份。
+
+完整理念、适用场景、兼容性判定和蓝绿升级流程见 [docs/version-isolation.md](docs/version-isolation.md)。
+
 ## 清理测试实例
 
 先停止对应 DSH 进程，再明确检查路径，最后手动删除测试目录。不要把递归删除命令写成依赖未验证环境变量的脚本。
