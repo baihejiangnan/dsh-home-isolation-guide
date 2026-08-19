@@ -1,0 +1,8 @@
+{
+  "name": "dsh-isolated-launcher-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node launcher.mjs"
+  }
+}

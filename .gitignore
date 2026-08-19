@@ -1,0 +1,7 @@
+.DSH_HOME/
+.work/
+target/
+node_modules/
+*.log
+.env
+.credentials.yaml
